@@ -1,0 +1,18 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml ./
+
+RUN corepack enable && corepack prepare pnpm@8.15.6 --activate && pnpm install
+ARG REACT_APP_AUDIO_SERVER_URL
+ARG REACT_APP_AUDIO_TRANSCRIBER_URL
+ENV REACT_APP_AUDIO_SERVER_URL=$REACT_APP_AUDIO_SERVER_URL
+ENV REACT_APP_AUDIO_TRANSCRIBER_URL=$REACT_APP_AUDIO_TRANSCRIBER_URL
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["pnpm", "start"]
+
